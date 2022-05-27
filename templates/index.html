@@ -1,0 +1,135 @@
+
+{% extends 'nav.html' %}
+{% comment %} {% extends 'basic.html' %} {% endcomment %}
+
+
+{% load static %}
+
+{% block body %}
+
+ <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" >
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'img/img1.jpg' %}" class="d-block w-100" width="450px" height="450px" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'img/img2.jpg' %}" class="d-block w-100"  width="450px" height="450px" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'img/img3.jpg' %}" class="d-block w-100"  width="450px" height="450px" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>  
+  {% comment %} <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <!-- <script src="Jquery.js"></script> -->
+    <title>Document</title>
+</head> {% endcomment %}
+
+  <body s>
+    <p class="h1" align="center">Products</p>
+    <br><br>
+
+  
+        {% comment %} //////////////////////////  style="margin-top:40px"{% endcomment %}
+        <div class="container" >
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="row">
+
+                      {% for product in product %} 
+                          <div class="col-md-3" style="margin-bottom:40px">
+                            <div class="card h-100">
+                              <div class="card-body" >
+                               <div class="category-image" >
+                                      <img src="{{product.product_image.url}}" class="card-img-top w-100 "  alt="category image"
+                                       onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}';" style="cursor:pointer;">
+                                </div>
+                                <div class="card-body" >
+                                  {% comment %} <ul class="list-group list-group-flush"  >
+                                      <li type="none"><p class="card-text">{{product.product_name}}</p></li>
+                                      <li type="none"><p class="card-text">&#8377 {{product.product_price}} price </p></li>
+                                  </ul> {% endcomment %}
+                               </div> 
+                              </div>
+                            </div> 
+                          </div>
+                          {% endfor %}
+                          {% for product in product %} 
+                          <div class="col-md-3" style="margin-bottom:40px">
+                            <div class="card h-100">
+                              <div class="card-body" >
+                               <div class="category-image" >
+                                      <img src="{{product.product_image.url}}" class="card-img-top w-100 "  alt="category image"
+                                       onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}';" style="cursor:pointer;">
+                                </div>
+                                <div class="card-body" >
+                                  {% comment %} <ul class="list-group list-group-flush"  >
+                                      <li type="none"><p class="card-text">{{product.product_name}}</p></li>
+                                      <li type="none"><p class="card-text">&#8377 {{product.product_price}} price </p></li>
+                                  </ul> {% endcomment %}
+                               </div> 
+                              </div>
+                            </div> 
+                          </div>
+                          {% endfor %}
+                          
+                  </div>
+              </div>
+          </div>
+      </div>
+
+    {% comment %} <div class="card-group">
+      <div class="row row-cols-1 row-cols-md-4 g-4 ms-4 mt-3 mb-3 me-3"  height="600px" width="600%">
+          
+            {% for product in product %}  
+            <div class="row row-cols-1 row-cols-md-4 g-4 ms-4 mt-3 mb-3 me-3"  height="250px" width="250%">
+            
+                <div class="card">
+                    <img src="{{product.product_image.url}}" class="card-img-top"  height="250px" width="250%" alt="...">
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li type="none"><p class="card-text">{{product.product_name}}</p></li>
+                        <li type="none"><p class="card-text">&#8377 {{product.product_price}} sq.ft. </p></li>
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+          </div>
+           
+        </div>
+      </div>
+    </div> {% endcomment %}
+  </div>
+    </div>
+  </div>
+</div>
+</div>
+       
+</body>
+
+  
+
+
+
+ 
+   
+  {% endblock body %}

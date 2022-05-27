@@ -1,0 +1,58 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block body %}
+
+
+<h1>
+<p>My Oders......!</p>
+</h1>
+
+
+ {% comment %} {{product.product_name}}
+{{product.product_price}}
+<div class="category-image">
+    <img src="{{product.product_image.url}}" class="card-img-top w-100" height="200px" width="100%"  alt="..."
+     style="cursor:pointer;">
+</div> {% endcomment %}
+
+{{product.product_price}}
+<div>
+<ul>
+    {% comment %} <li type="none"><h5 class="card-title">Card title</h5></li>
+    <li type="none"><p class="card-text">Price  ₹ {{product.product_price}}</p></li>
+    <li type="none"><p class="card-text">Select Cloth color</p></li>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+      <label class="form-check-label" for="inlineCheckbox1"></label>{{product.product_color1}}
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+      <label class="form-check-label" for="inlineCheckbox2">{{product.product_color2}}</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" >
+      <label class="form-check-label" for="inlineCheckbox3">{{product.product_color3}}</label>
+    </div> {% endcomment %}
+
+
+    {% comment %} <li type="none"><p class="card-text">length:</li>
+      <input type="number" min='1' max='5' value='1'>
+    <li type="none"><p class="card-text">width:</p></li>
+    <input type="number" min='1' max='5' value='1'> {% endcomment %}
+
+
+
+    <li type="none"><p class="card-text">Quantity:</p>
+      <input type="number" min='1' max='10' value='1'>
+    </li>
+    <li type="none" class="mt-2"><a href="#" class="btn btn-warning">Buy</a>&nbsp<button class="btn btn-warning" onclick="window.location.href = '/cart';">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+      </svg>
+  </button></li>
+    <li type="none" class="mt-2"> </li>
+  </ul>
+</div> 
+{% endblock body %}

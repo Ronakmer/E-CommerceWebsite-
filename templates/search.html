@@ -1,0 +1,105 @@
+
+{% extends 'nav.html' %}
+{% comment %} {% extends 'basic.html' %} {% endcomment %}
+
+
+{% load static %}
+
+{% block body %}
+
+
+
+  <body>
+    <p class="h1" align="center">Products</p>
+    <br><br>
+{% comment %} {{request.GET.q}} {% endcomment %}
+ {% comment %} {{data}}  {% endcomment %}
+
+        {% comment %} ////////////////////////// {% endcomment %}
+         <div class="container" >
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="row">
+                    
+                      {% for product in data %} 
+                      
+                          <div class="col-md-3" style="margin-bottom:40px">
+                            <div class="card h-100" >
+                              <div class="card-body ">
+                               <div class="category-image">
+                                      <img src="{{product.product_image.url}}" class="card-img-top w-100"   alt="category image"
+                                       onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}';" style="cursor:pointer;">
+                                </div>
+                                <div class="card-body">
+                                  <ul class="list-group list-group-flush">
+                                      <li type="none"><p class="card-text">{{product.product_name}}</p></li>
+                                      <li type="none"><p class="card-text">&#8377 {{product.product_price}} price </p></li>
+                                  </ul>
+                               </div> 
+                              </div>
+                            </div> 
+                          </div>
+                          {% endfor %}
+                          
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+  </div>
+    </div>
+  </div>
+</div>
+</div>
+       
+</body> 
+
+  
+{% comment %} <body>
+
+  <br/></br/>
+  
+  <div class="container">
+  
+     <div class="col-md-8 offset-md-2">
+  
+  {% if query %}
+  
+             <h2>
+  
+             {% with results.count as total_results %}
+  
+             Found {{ total_results }} result{{ total_results|pluralize }}
+  
+             {% endwith %}
+  
+             </h2>
+  
+     {% for c in results %}
+  
+    <a href="{{c.get_url}}"><h3>{{c.product_name}}</h3></a>
+  
+    <h3>{{c.product_des}}</h3>
+  
+  
+     {% empty %}
+  
+     <h3>No results found.</h3>
+  
+     {% endfor %}
+  
+    {% endif %}
+  
+       
+  
+      </div>
+  
+  </div>
+  
+  </body> {% endcomment %}
+
+
+ 
+   
+  {% endblock body %}
