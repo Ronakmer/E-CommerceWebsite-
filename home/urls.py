@@ -15,11 +15,26 @@ urlpatterns = [
     path('login', views.loginuser, name="loginuser"),
     path('logout', views.logoutUser, name="logoutUser"),
     path('nav', views.nav, name="nav"),
-    path('cart', views.cart, name="cart"),
+    # path('add-to-cart', views.addtocart, name="addtocart"),
+    # path('cart', views.cart, name="cart"),
     path('search', views.search, name="search"),
     path('customerorder', views.customerorder, name="customerorder"),
     path('orderproduct', views.orderproduct, name="orderproduct"),
     path('ResetPassword', views.ResetPassword, name="ResetPassword"),
+
+
+
+    path('cart/add/<int:id>/', views.cart_add, name='cart_add'),
+    path('cart/item_clear/<int:id>/', views.item_clear, name='item_clear'),
+    path('cart/item_increment/<int:id>/',
+         views.item_increment, name='item_increment'),
+    path('cart/item_decrement/<int:id>/',
+         views.item_decrement, name='item_decrement'),
+    path('cart/cart_clear/', views.cart_clear, name='cart_clear'),
+    path('cart/',views.cart_detail,name='cart_detail'),
+
+
+    
 
   
     

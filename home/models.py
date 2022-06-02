@@ -1,5 +1,6 @@
 from distutils.command.upload import upload
 from email.policy import default
+from itertools import product
 from django.db import models    
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
@@ -36,23 +37,24 @@ def __str__(self):
 
 
 
-
-
 class Product(models.Model):
-    product_id = models.AutoField
+    
+    product_id = models.CharField(max_length=50, default="")
     product_name = models.CharField(max_length=50, default="")
-    product_image =models.ImageField(upload_to="home/img")
-    product_price = models.CharField(max_length=10)
-    product_color1 = models.CharField(max_length=10)
-    product_color2 = models.CharField(max_length=10)
-    product_color3 = models.CharField(max_length=10)
+    product_category = models.CharField(max_length=30, default="")
+    product_image =models.ImageField(upload_to="home/img", default="")
+    product_price = models.CharField(max_length=30, default="")
+    product_color1 = models.CharField(max_length=30, default="")
+    product_color2 = models.CharField(max_length=30, default="")
+    product_color3 = models.CharField(max_length=30, default="")
+    product_des = models.CharField(max_length=200, default="")
+    product_qty = models.CharField(max_length=200, default="")
 
-
-    product_des = models.CharField(max_length=50)
 
 
     def __str__(self):
         return f"{self.product_name}"
+
 
 
 
@@ -72,6 +74,16 @@ class order(models.Model):
     def __str__(self):
         return f"{self.first_name}"
    
+    
+# class Cart(models.Model):
+#     pass
+   
+    # user=models.ForeignKey(User,on_delete=models.CASCADE)
+    # product=models.ForeignKey(Product,on_delete=models.CASCADE, default=0)
+    # product_qty=models.IntegerField(null=False,blank=False)
+    # created_at=models.DateTimeField(auto_now_add=True)
+
+
     
 
 
