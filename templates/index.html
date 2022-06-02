@@ -51,49 +51,69 @@
         {% comment %} //////////////////////////  style="margin-top:40px"{% endcomment %}
         <div class="container" >
           <div class="row">
+            
               <div class="col-md-12">
                   <div class="row">
+                   
 
                       {% for product in product %} 
                           <div class="col-md-3" style="margin-bottom:40px">
                             <div class="card h-100">
-                              <div class="card-body" >
+                              
+                              {% comment %} <p class="card-text " style="ba">{{product.product_price}}</p>  {% endcomment %}
+                              <div>
+                                 <span class="card-text " style="background-color:cyan">₹ {{product.product_price}}</span>
+  
+                                
+                              </div>
+                               <div class="card-body" >
                                <div class="category-image" >
                                       <img src="{{product.product_image.url}}" class="card-img-top w-100 "  alt="category image"
-                                       onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}';" style="cursor:pointer;">
+                                       onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}&product_category={{product.product_category}}';" style="cursor:pointer;">
                                 </div>
+                                
                                 <div class="card-body" >
                                   {% comment %} <ul class="list-group list-group-flush"  >
                                       <li type="none"><p class="card-text">{{product.product_name}}</p></li>
                                       <li type="none"><p class="card-text">&#8377 {{product.product_price}} price </p></li>
                                   </ul> {% endcomment %}
                                </div> 
+                               
                               </div>
-                            </div> 
-                          </div>
-                          {% endfor %}
-                          {% for product in product %} 
-                          <div class="col-md-3" style="margin-bottom:40px">
-                            <div class="card h-100">
-                              <div class="card-body" >
-                               <div class="category-image" >
-                                      <img src="{{product.product_image.url}}" class="card-img-top w-100 "  alt="category image"
-                                       onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}';" style="cursor:pointer;">
-                                </div>
-                                <div class="card-body" >
-                                  {% comment %} <ul class="list-group list-group-flush"  >
-                                      <li type="none"><p class="card-text">{{product.product_name}}</p></li>
-                                      <li type="none"><p class="card-text">&#8377 {{product.product_price}} price </p></li>
-                                  </ul> {% endcomment %}
-                               </div> 
+                           
+                              
+                              <div class="mt-2" align="right">
+                                  
+                                <a href="#" class="btn btn-info form-inline">Buy</a>&nbsp
+                                <a href="{% url 'cart_add' product.id %}"> <button  class="btn btn-info addToCartBtn" type="button" id="addToCartBtn" >
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                      class="bi bi-cart3" viewBox="0 0 16 16">                                      
+                                      <path
+                                          d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                  </svg>
+                              </button></a>
+                                <br>
                               </div>
+                              
                             </div> 
+                            
+                            
+                            <div >
+                              
+                              <p class="card-text bg-warning  "  align="center " style="">{{product.product_name}}</p>
+                            </div>
                           </div>
+                          
                           {% endfor %}
                           
+                          
+                           
                   </div>
+                  
               </div>
+              
           </div>
+          
       </div>
 
     {% comment %} <div class="card-group">

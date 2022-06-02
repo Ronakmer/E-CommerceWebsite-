@@ -1,87 +1,145 @@
-{% extends 'index.html' %}
+{% extends 'nav.html' %}
 {% load static %}
 
  {% block body %}
 
 
+
+
+
+ 
 <h1 align="center">
-<p>My Oderspro......! </p>
+<p>Product Details  </p>
 </h1>
-
-
-{% comment %} {{product.pk}} {% endcomment %}
-
-{% comment %} {{product.product_name}}
-{{product.product_price}}
-<div class="category-image">
-    <img src="{{product.product_image.url}}" class="card-img-top w-100" height="200px" width="100%"  alt="..."
-     style="cursor:pointer;">
-</div> {% endcomment %}
+<br><br>
 
 
 
-{% comment %} style="bord-width:initial" {% endcomment %}
-{% comment %} style="background: darkgrey {% endcomment %}
 
-<div class="container " >
-          <div class="row">
-              <div class="col-md-12">
-                  <div class="row">
-                    
-                
-                          <div class="col-md-3" >
-                            <div class="card h-100" >
-                              <div  class="card-body ">
-                               <div class="category-image">
-                                      <img src="{{Product.product_image.url}}" class="card-img-top w-100"  alt="category image"
-                                       onclick="window.location.href = '/orderproduct?product_name={{Product.product_name}}';" style="cursor:pointer;">
 
-                                      
-                                </div>
-                                
-                                
-                             
-                            </div> 
-                            <div class="card-body" align="right">
-                              <ul class="list-group list-group-flush">
-                                  <li type="none"><p class="card-text">{{Product.product_name}}</p></li>
-                                  <li type="none"><p class="card-text">{{Product.product_des}}</p></li>
-                                  <li type="none"><p class="card-text">&#8377 {{Product.product_price}} price </p></li>
-                                  <br><br>
-                                  <li type="none" class="mt-2"><a href="#" class="btn btn-primary">Buy</a>&nbsp<button class="btn btn-primary" onclick="window.location.href = '/cart';">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-cart3" viewBox="0 0 16 16">
-                                        <path
-                                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                                    </svg>
-                                </button></li>
-                                  {% comment %} <button type="submit" class="btn btn-primary" data-bs-target="#orderModal" data-bs-toggle="modal">Oder</button> {% endcomment %}
-                              </ul>
-                           </div> 
-                          </div>
-                        
-                  </div>
-              </div>
-          </div>
+<div align="center">
+<div class="card mb-3 product_data" style="max-width: 950px; " >
+    <div class="row no-gutters">
+      <div class="col-md-4 "style="max-width:600px;">
+        <img src="{{product.product_image.url}}" class="card-img-top w-100"   alt="category image"
+        onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}';" style="cursor:pointer; margin-top:50px; margin-left:10px;   ">
       </div>
-    
+      <div class="col-md-8  bg-info " align="left">
+        <div class="card-body" >
+            <ul class="list-group list-group-flush">
+                <li type="none"><p class="card-text">{{product.product_name}}</p></li><br>
+                <li type="none"><p class="card-text">{{product.product_des}}</p></li><br>                                                     
+                <li type="none"><p class="card-text">&#8377 {{product.product_price}} price </p></li>
+                <br><br>
+               <form action="/" method="POST">
+                {% csrf_token %}
+                <input type="hidden"  class="prod_id" value="{{product.id}}">
+                <li type="none" class="mt-2" align="right"><a href="#" class="btn btn-warning">Buy</a>&nbsp
+                  <a href="{% url 'cart_add' product.id %}"> <button  class="btn btn-warning addToCartBtn" type="button" id="addToCartBtn" >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-cart3" viewBox="0 0 16 16">                                      
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                    </svg>
+                </button></a>
+                 
+            </form>
+           
+              <script>
+               {% comment %} $('.addToCartBtn').click(function (e) {
+                 e.preventDefault();
+
+                 var product_id=$(this).closest('.product_data').find('.prod_id').val();
+                 var product_qty=$(this).closest('.product_data').find('.qty-input').val();
+                 var token= $('input[name=csrfmiddlewaretoken]').val();
+                $.ajax({
+
+                  method: "POST",
+                  url: "/add-to-cart",
+                  data: {
+                    'product_id':product_id,
+                    'product_qty':product_qty,
+                    csrfmiddlewaretoken: token
+                  
+                  },
+                  
+                  success:function(response){
+                    
+                    
+                    alertify.success(response.status)
+                   
+
+
+                  }
+
+                });
+           }); {% endcomment %}
+              </script>   
+           
+          
+               
+            </ul>
+        </div>
+      </div>
+    </div>
+  </div> 
 </div>
 
-  {% comment %} <div class="modal fade overflow-auto" id="orderModal" tabindex="-1" aria-labelledby="orderModal" aria-hidden="true">
-    <div class="modal-dialog">
-         <div class="modal-content">
-            <div class="modal-header  bg-info">
-                <h5 class="modal-title" id="orderModalTitle">Your Order</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<br><hr><hr><br>
+
+<div class="container" >
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+
+                {% for product in Category %} 
+                    <div class="col-md-3" style="margin-bottom:40px">
+                      <div class="card h-100">
+                        <div>
+                          <span class="card-text " style="background-color:cyan">₹ {{product.product_price}}</span>
+
+                         
+                       </div>
+                        <div class="card-body" >
+                         <div class="category-image" >
+                                <img src="{{product.product_image.url}}" class="card-img-top w-100 "  alt="category image"
+                                 onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}&product_category={{product.product_category}}';" style="cursor:pointer;">
+                          </div>
+                          
+                          <div class="card-body" >
+                        
+                         </div> 
+                         
+                        </div>
+                        <div class="mt-2" align="right">
+                                  
+                          <a href="#" class="btn btn-info form-inline">Buy</a>&nbsp<button class="btn btn-info .addToCartBtn"  onclick="window.location.href = '/cart?';">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-cart3" viewBox="0 0 16 16">                                      
+                          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                          </svg>
+                          </button>
+                          <br>
+                        </div>
+                      </div> 
+                      <div >
+                        <p class="card-text bg-warning  "  align="center " style="">{{product.product_name}}</p>
+                      </div>
+                    </div>
+                    
+                    {% endfor %}
+                    
+                    
+                    
             </div>
-                <div class="modal-body">
-             
-                </div>
         </div>
     </div>
-</div> {% endcomment %}
-<hr>
-<hr>
+</div>
 
+                    
+              
+                    
+       
 
-{% endblock body %}
+      
+{% endblock body %} 
