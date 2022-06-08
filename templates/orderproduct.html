@@ -1,6 +1,6 @@
 {% extends 'nav.html' %}
 {% load static %}
-
+{% load cart_tag %}
  {% block body %}
 
 
@@ -22,7 +22,7 @@
     <div class="row no-gutters">
       <div class="col-md-4 "style="max-width:600px;">
         <img src="{{product.product_image.url}}" class="card-img-top w-100"   alt="category image"
-        onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}';" style="cursor:pointer; margin-top:50px; margin-left:10px;   ">
+        onclick="window.location.href = '';" style="cursor:pointer; margin-top:50px; margin-left:10px;   ">
       </div>
       <div class="col-md-8  bg-info " align="left">
         <div class="card-body" >
@@ -31,10 +31,15 @@
                 <li type="none"><p class="card-text">{{product.product_des}}</p></li><br>                                                     
                 <li type="none"><p class="card-text">&#8377 {{product.product_price}} price </p></li>
                 <br><br>
-               <form action="/" method="POST">
+                <form method="post" action="/checkout?return={{request.get_full_path}}">
                 {% csrf_token %}
                 <input type="hidden"  class="prod_id" value="{{product.id}}">
-                <li type="none" class="mt-2" align="right"><a href="#" class="btn btn-warning">Buy</a>&nbsp
+                <li type="none" class="mt-2" align="right">
+                  
+                  
+                  <a href="" class="btn btn-warning form-inline" data-bs-target="#checkoutModal" data-bs-toggle="modal">Buy</a>&nbsp
+
+                  {% comment %} <a href="" class="btn btn-warning form-inline" data-bs-target="#checkoutModal" data-bs-toggle="modal" >Buy</a>&nbsp {% endcomment %}
                   <a href="{% url 'cart_add' product.id %}"> <button  class="btn btn-warning addToCartBtn" type="button" id="addToCartBtn" >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-cart3" viewBox="0 0 16 16">                                      
@@ -42,9 +47,14 @@
                             d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                     </svg>
                 </button></a>
-                 
+                {% comment %} {% for key,value in request.session.cart.items %}
+                <a class="btn btn-info  quantity" href="{% url 'item_decrement' value.product_id %}"> -</a>
+                <input type="text" name="quantity" style="width:50px;  height:50px; display: initial; "  class="form-control text-center"  size="2" value=" {{value.quantity}}">
+  
+                <a class="btn btn-info  quantity" href="{% url 'item_increment' value.product_id %}">+</a>
+                {% endfor %} {% endcomment %}
             </form>
-           
+            </div> 
               <script>
                {% comment %} $('.addToCartBtn').click(function (e) {
                  e.preventDefault();
@@ -93,39 +103,75 @@
             <div class="row">
 
                 {% for product in Category %} 
-                    <div class="col-md-3" style="margin-bottom:40px">
-                      <div class="card h-100">
-                        <div>
-                          <span class="card-text " style="background-color:cyan">₹ {{product.product_price}}</span>
+                <div class="col-md-3" style="margin-bottom:40px">
+                  <div class="card h-100">
+                    
+                    {% comment %} <p class="card-text " style="ba">{{product.product_price}}</p>  {% endcomment %}
+                    {% comment %} <div>
+                       <span class="card-text " style="background-color:cyan">₹ {{product.product_price}}</span>
 
-                         
-                       </div>
-                        <div class="card-body" >
-                         <div class="category-image" >
-                                <img src="{{product.product_image.url}}" class="card-img-top w-100 "  alt="category image"
-                                 onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}&product_category={{product.product_category}}';" style="cursor:pointer;">
-                          </div>
-                          
-                          <div class="card-body" >
-                        
-                         </div> 
-                         
-                        </div>
-                        <div class="mt-2" align="right">
-                                  
-                          <a href="#" class="btn btn-info form-inline">Buy</a>&nbsp<button class="btn btn-info .addToCartBtn"  onclick="window.location.href = '/cart?';">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-cart3" viewBox="0 0 16 16">                                      
-                          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                          </svg>
-                          </button>
-                          <br>
-                        </div>
-                      </div> 
-                      <div >
-                        <p class="card-text bg-warning  "  align="center " style="">{{product.product_name}}</p>
-                      </div>
+                      
+                    </div> {% endcomment %}
+                    <div >
+                    
+                      <p class="card-text bg-warning  "  align="center " style="">{{product.product_name}}</p>
                     </div>
+                     <div class="card-body" >
+                     
+                     <div class="category-image" >
+                            <img src="{{product.product_image.url}}" class="card-img-top w-100 "  alt="category image"
+                             onclick="window.location.href = '/orderproduct?product_name={{product.product_name}}&product_category={{product.product_category}}';" style="cursor:pointer;">
+                             
+                      </div>
+                      
+
+                      
+                     {% comment %} <div class="card-body" >
+                         <ul class="list-group list-group-flush"  >
+                          <span class="card-text form-inline" style="background-color:cyan"   >₹{{product.product_price}}</span>
+                        </ul> 
+                     </div>  {% endcomment %}
+                     
+                    </div>
+                    
+                 
+                    <span class="card-text form-inline" style="background-color:cyan" align="center" >₹{{product.product_price}}</span>
+                    
+
+                    <div class=" card-footer mt-2"   align="right">
+                      <form method="post" action="/checkout?return={{request.get_full_path}}">
+                        {% csrf_token %}
+
+                      
+                     
+                      {% comment %} <a href="#" class="btn btn-info  " style="margin-left:110px" >Buy</a>&nbsp {% endcomment %}
+                      {% comment %} <a href="#" class="btn btn-info form-inline" data-bs-target="#checkoutModal" data-bs-toggle="modal" >Buy</a>&nbsp {% endcomment %}
+
+                   
+
+                      {% comment %} &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp 
+                      &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  {% endcomment %}
+                      <a href="{% url 'cart_add' product.id %}" > <button  class="btn btn-info addToCartBtn"  type="button" id="addToCartBtn" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-cart3" viewBox="0 0 16 16">                                      
+                            <path
+                                d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                        </svg>
+                        </button></a>
+                          <br>
+                      </form>
+                    </div>
+                    {% comment %} <div >
+                    
+                      <p class="card-text bg-warning  "  align="center " style="">{{product.product_name}}</p>
+                    </div> {% endcomment %}
+                  </div> 
+                  
+                  
+                  
+                </div>
+                
+
                     
                     {% endfor %}
                     
@@ -137,8 +183,78 @@
 </div>
 
                     
+
+<div class="modal fade overflow-auto" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModal" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header  bg-warning">
+              <h5 class="modal-title" id="checkoutModalTitle">Check Out</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form method="post" action="/checkouts?return={{request.get_full_path}}">
+                {% csrf_token %}
+                {% comment %} <div class="mb-3">
+                    <label for="fname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name"
+                        required>
+                </div> {% endcomment %}
+                
+                {% comment %} <div class="mb-3">
+                    <label for="lname" class="form-label">User Name</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="username"
+                        required>
+                </div> {% endcomment %}
+                
+                {% comment %} <div class="mb-3">
+                    <label for="email" class="form-label">Gmail</label>
+                    <input type="email" class="form-control" id="email" name="email" value="name@gmail.com"
+                        placeholder="name@gmail.com" required>
+                </div>  {% endcomment %}
+                 <div class="col-12">
+                    <label for="inputAddress2" class="form-label">Address</label>
+                    <textarea  type="text" class="form-control" id="inputAddress2" name="address"  rows="2"  placeholder="Address" required></textarea >
+                  </div>
+                   <div class="col-md-6">
+                    <label for="inputCity" class="form-label">City</label>
+                    <input type="text" name="city" class="form-control" id="inputCity"  placeholder="City" required>
+                  </div> 
+                  <div class="col-md-6">
+                    <label for="inputCity" class="form-label">Pin Code</label>
+                    <input type="text" name="pincode" class="form-control" id="pincode"  placeholder="Pin Code" required>
+                  </div> 
+                  {% comment %} <div class="mb-3">
+                    <label for="lname" class="form-label">Pin Code</label>
+                    <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pin Code" required>
+                  </div> {% endcomment %}
+                  <div class="col-md-4">
+                    <label for="inputState" class="form-label">State</label>
+                    <select id="inputState" class="form-select" name="state" required>
+                      <option selected>Choose State...</option>
+                      <option>Gujarat</option>
+                      <option>Bihar</option>
+                      <option>Goa</option>
+                      <option>Assam</option>
+                    </select>
+                  </div> 
+                  <div class="col-md-6 ">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" name="phone" class="form-control" id="phone"  placeholder="Phone Number" required>
+                  </div> <br>
+                {% comment %} <div class="mb-3">
+                    <label for="pass1" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone" name="phone"
+                        placeholder="Phone Number" required>
+                </div> {% endcomment %}
+
+                <button type="submit" class="btn btn-warning">Submit</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
               
-                    
+            
        
 
       

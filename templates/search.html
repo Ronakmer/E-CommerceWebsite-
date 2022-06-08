@@ -25,12 +25,12 @@
                       
                           <div class="col-md-3" style="margin-bottom:40px">
                             <div class="card h-100" >
-                              <div>
+                              {% comment %} <div>
                                 <span class="card-text " style="background-color:cyan">₹ {{product.product_price}}</span>
       
                                
                              </div>
-                             
+                              {% endcomment %}
                               <div class="card-body ">
                                <div class="category-image">
                                       <img src="{{product.product_image.url}}" class="card-img-top w-100"   alt="category image"
@@ -43,15 +43,22 @@
                                   </ul>
                                </div>  {% endcomment %}
                               </div>
-                              <div class="mt-2" align="right">
-                                  
-                                <a href="#" class="btn btn-info form-inline">Buy</a>&nbsp<button class="btn btn-info .addToCartBtn"  onclick="window.location.href = '/cart?';">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                  class="bi bi-cart3" viewBox="0 0 16 16">                                      
-                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                                </svg>
-                                </button>
-                                <br>
+                              <div class="mt-2"  style="margin-bottom:5px">
+                                <form method="post" action="/checkout?return={{request.get_full_path}}">
+                                  {% csrf_token %}
+                                <span class="card-text-inline form-inline" style="background-color:cyan" >₹ {{product.product_price}}</span>  
+                               
+                                {% comment %} <a href="#" class="btn btn-info  " style="margin-left:110px" >Buy</a>&nbsp {% endcomment %}
+                                {% comment %} <a href="#" class="btn btn-info form-inline" data-bs-target="#checkoutModal" data-bs-toggle="modal" >Buy</a>&nbsp {% endcomment %}
+                                <a href="{% url 'cart_add' product.id %}" > <button  class="btn btn-info addToCartBtn"  style="margin-left:160px" type="button" id="addToCartBtn" >
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                      class="bi bi-cart3" viewBox="0 0 16 16">                                      
+                                      <path
+                                          d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                  </svg>
+                                  </button></a>
+                                    <br>
+                                </form>
                               </div>
                             </div> 
                             <div >

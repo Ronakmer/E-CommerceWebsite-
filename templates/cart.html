@@ -6,7 +6,7 @@
 
 <h1 align="center">
 <p>My Cart......!</p>
-Your Amazon Cart is empty
+{% comment %} Your Amazon Cart is empty {% endcomment %}
 </h1>
 
 <body>
@@ -23,9 +23,9 @@ Your Amazon Cart is empty
 <div class="py-5">
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-24">
         <div class="card body">
-          {% comment %} {% if %} {% endcomment %}
+          {% comment %} {% if user.is_authenticated %} {% endcomment %}
           {% for key,value in request.session.cart.items %}
             <div class="row" style="margin-bottom:40px">
               <div class="col-md-2 my-auto">
@@ -36,6 +36,7 @@ Your Amazon Cart is empty
               </div>
               <div class="col-md-3 my-auto">
                 <div>
+                  
                 <div class="category-name" >
                   {{value.name}} 
                 </div>
@@ -48,16 +49,25 @@ Your Amazon Cart is empty
               </div>
               <div class="col-md-3 my-auto">
                 <div class="category-name" >
+                  {% comment %} {% if product_qty < item_increment %} {% endcomment %}
                   <a class="btn btn-info  quantity" href="{% url 'item_decrement' value.product_id %}"> -</a>
                   <input type="text" name="quantity" style="width:50px;  height:50px; display: initial; "  class="form-control text-center"  size="2" value=" {{value.quantity}}">
 
-                  <a class="btn btn-info  quantity"href="{% url 'item_increment' value.product_id %}">+</a>
-
+                  <a class="btn btn-info  quantity" href="{% url 'item_increment' value.product_id %}">+</a>
+                  {% comment %} {%  else %} {% endcomment %}
+                  {% comment %} <p>no</p> {% endcomment %}
+                  {% comment %} {% endif%} {% endcomment %}
                 </div> 
               </div>
               <div class="col-md-2 my-auto">
+                <form method="post" action="/checkout?return={{request.get_full_path}}">
+                  {% csrf_token %}
+                
                 <div class="category-name" >
-                      <a href="#" class="btn btn-info form-inline">Buy</a>&nbsp
+                  <span class="card-text " >Total 
+                    ₹ {{ value.price|multiply:value.quantity }}</span>&nbsp&nbsp&nbsp
+                      {% comment %} <a href="#" class="btn btn-info form-inline" data-bs-target="#checkoutModal" data-bs-toggle="modal" >Buy</a>&nbsp {% endcomment %}
+                      {% comment %} <button class="btn btn-info my-2 my-sm-0 form-inline"  data-bs-target="#checkoutModal" data-bs-toggle="modal" type="submit">Buy</button>&nbsp {% endcomment %}
                         <a  class="btn btn-info addToCartBtn" href="{% url 'item_clear' key %}">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                           <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -65,13 +75,19 @@ Your Amazon Cart is empty
                           </svg>
                         </a>
                 </div>
+              </form>
               </div>
-              <div class="col-md-2 my-auto">
+              {% comment %} <div class="col-md-2 my-auto">
                 <div class="category-name" >
-                  Total 
-                ₹ {{ value.price|multiply:value.quantity }} 
+                  <div>
+                    <span class="card-text " style="background-color:gold">Total 
+                      ₹ {{ value.price|multiply:value.quantity }}</span>
+
+                   
+                 </div>
+                  
                 </div>
-              </div>
+              </div> {% endcomment %}
             </div>
          
            
@@ -80,14 +96,22 @@ Your Amazon Cart is empty
  
           {% endfor %}
           {% comment %} {% elif %} {% endcomment %}
-          
+          {% comment %} <p>no</p> {% endcomment %}
           {% comment %} {% endif %} {% endcomment %}
           <div align="right">
             <h4>
-            Subtotal:
-             ₹ {{cart_total_amount}}
-            </h4> 
+              <span class="card-text " style="background-color:gold">
+                
+                Subtotal:
+                ₹ {{cart_total_amount}}
+                
+              </span>
+            </h4>
+             
           </div>
+          <div align="center">
+            <button class="btn btn-warning my-2 my-sm-0"  data-bs-target="#checkoutModal" data-bs-toggle="modal" type="submit">CheckOut</button>
+            </div>
         </div>
       </div>
       </div>
@@ -97,13 +121,82 @@ Your Amazon Cart is empty
 </div>
 
 
+{% comment %}  {% endcomment %}
+{% comment %} <div align="right">
+<button class="btn btn-warning my-2 my-sm-0"  data-bs-target="#checkoutModal" data-bs-toggle="modal" type="submit">CheckOut</button>
+</div>  {% endcomment %}
 
- 
+<div class="modal fade overflow-auto" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModal" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header  bg-warning">
+              <h5 class="modal-title" id="checkoutModalTitle">Check Out</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form method="post" action="/checkout?return={{request.get_full_path}}" >
+                  {% csrf_token %}
+                  {% comment %} <div class="mb-3">
+                      <label for="fname" class="form-label">First Name</label>
+                      <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name"
+                          required>
+                  </div> {% endcomment %}
+                  
+                  {% comment %} <div class="mb-3">
+                      <label for="lname" class="form-label">User Name</label>
+                      <input type="text" class="form-control" id="username" name="username" placeholder="username"
+                          required>
+                  </div> {% endcomment %}
+                  
+                  {% comment %} <div class="mb-3">
+                      <label for="email" class="form-label">Gmail</label>
+                      <input type="email" class="form-control" id="email" name="email" value="name@gmail.com"
+                          placeholder="name@gmail.com" required>
+                  </div>  {% endcomment %}
+                   <div class="col-12">
+                      <label for="inputAddress2" class="form-label">Address</label>
+                      <textarea  type="text" class="form-control" id="inputAddress2" name="address"  rows="2"  placeholder="Address" required></textarea >
+                    </div>
+                     <div class="col-md-6">
+                      <label for="inputCity" class="form-label">City</label>
+                      <input type="text" name="city" class="form-control" id="inputCity"  placeholder="City" required>
+                    </div> 
+                    <div class="col-md-6">
+                      <label for="inputCity" class="form-label">Pin Code</label>
+                      <input type="text" name="pincode" class="form-control" id="pincode"  placeholder="Pin Code" required>
+                    </div> 
+                    {% comment %} <div class="mb-3">
+                      <label for="lname" class="form-label">Pin Code</label>
+                      <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pin Code" required>
+                    </div> {% endcomment %}
+                    <div class="col-md-4">
+                      <label for="inputState" class="form-label">State</label>
+                      <select id="inputState" class="form-select" name="state" required>
+                        <option selected>Choose State...</option>
+                        <option>Gujarat</option>
+                        <option>Bihar</option>
+                        <option>Goa</option>
+                        <option>Assam</option>
+                      </select>
+                    </div> 
+                    <div class="col-md-6 ">
+                      <label for="phone" class="form-label">Phone Number</label>
+                      <input type="text" name="phone" class="form-control" id="phone"  placeholder="Phone Number" required>
+                    </div> <br>
+                  {% comment %} <div class="mb-3">
+                      <label for="pass1" class="form-label">Phone Number</label>
+                      <input type="text" class="form-control" id="phone" name="phone"
+                          placeholder="Phone Number" required>
+                  </div> {% endcomment %}
 
-{% comment %} <a class="quantity" href="">-</a>
-<input type="text" name="quantity" style="width:50px; display: initial; "  class="form-control text-center"  size="2" value="1">
+                  <button type="submit" class="btn btn-warning">Submit</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
 
-<a class="quantity" href="">+</a> {% endcomment %}
+
 
 </body>
 {% endblock body %}
