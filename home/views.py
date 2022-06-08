@@ -4,12 +4,13 @@ from http.client import OK
 from itertools import product
 from multiprocessing import context
 from turtle import update
+from unicodedata import name
 
 from django.contrib import messages
 from unittest import loader
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render,redirect
-from .models import   signup,User,Product
+from .models import   signup,User,Product,order
 from django.contrib.auth import logout,login,authenticate,update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import PasswordChangeForm
@@ -18,23 +19,34 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
 
-@login_required(login_url="/users/login")
+from django.contrib.auth.models import User
+
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
+from django.http.response import JsonResponse
+from rest_framework.response import Response
+from rest_framework import serializers,viewsets
+from home.serializers import UserSerializer
+
+# @login_required(login_url="/users/login")
 def cart_add(request, id):
     cart = Cart(request)
     product = Product.objects.get(id=id)
     cart.add(product=product)
+    messages.success(request, 'Product Add To Cart')
     return redirect("/")
 
 
-@login_required(login_url="/users/login")
+# @login_required(login_url="/users/login")
 def item_clear(request, id):
     cart = Cart(request)
     product = Product.objects.get(id=id)
     cart.remove(product)
+    messages.success(request, 'Product Clear ')
     return redirect("cart_detail")
 
 
-@login_required(login_url="/users/login")
+# @login_required(login_url="/users/login")
 def item_increment(request, id):
     cart = Cart(request)
     product = Product.objects.get(id=id)
@@ -42,7 +54,7 @@ def item_increment(request, id):
     return redirect("cart_detail")
 
 
-@login_required(login_url="/users/login")
+# @login_required(login_url="/users/login")
 def item_decrement(request, id):
     cart = Cart(request)
     product = Product.objects.get(id=id)
@@ -50,18 +62,143 @@ def item_decrement(request, id):
     return redirect("cart_detail")
 
 
-@login_required(login_url="/users/login")
+# @login_required(login_url="/users/login")
 def cart_clear(request):
     cart = Cart(request)
     cart.clear()
+    # messages.success(request, 'Product Clear In Cart')  
     return redirect("cart_detail")
 
 
-@login_required(login_url="/users/login")
+# @login_required(login_url="/users/login")
 def cart_detail(request):
     return render(request, 'cart.html')
 
+
+def checkout(request):
+    if request.method =='POST':
+        # f=request.POST['fname']
+        
+        address=request.POST.get('address')
+       
+        state=request.POST.get('state')
+        city=request.POST.get('city')
+        pincode=request.POST.get('pincode')
     
+        phone=request.POST.get('phone')
+
+        cart=request.session.get('cart')
+        uid=request.session.get('_auth_user_id')
+        username=User.objects.get(pk=uid)
+        print(cart,uid,username)
+        # print(cart,User,"============")
+        # print(repr(User))
+        # print(order,"===========")
+        #  username = User(username=User),
+
+        for i in cart:
+            a=((cart[i]['price']))
+            b=cart[i]['quantity']
+            total=a*b
+            # print(i)
+            Order=order(
+                username = username,
+                # username = User(username=User),
+                # username = User(request.user),
+                # username=User[i]['Username'],
+                # user=User,
+                # username=User.request,
+                # username=User[i][uid],
+                # username="asdasdad",
+                product_name=cart[i]['name'],
+                product_price=cart[i]['price'],
+                product_qty=cart[i]['quantity'],
+                product_image=cart[i]['image'],
+                address=address,
+                pincode=pincode,
+                number=phone,
+                total=total,
+                city=city,
+                state=state,
+            )
+            # Order=Product.objects.filter(product_id=request.GET['product_id'])[0]
+            # Order.quantity=Order.quantity - cart.product_qty
+            Order.save()
+            # (product_name=request.GET['product_name'])[0]
+            # Order=Product.objects.filter(product_id=cart.name).first()
+          
+            # orderproduct.save()
+
+            
+            messages.success(request, 'This is Checkout')
+        request.session['cart'] = {}
+            # print(Order)
+            
+        # print(Order.placeOrder())
+        # Order.save(commit=False)
+
+        return redirect("index")
+            
+    return render(request,'cart.html')
+
+
+def checkouts(request):
+    # if request.method =='POST':
+
+        
+    #     address=request.POST.get('address')
+       
+    #     state=request.POST.get('state')
+    #     city=request.POST.get('city')
+    #     pincode=request.POST.get('pincode')
+    
+    #     phone=request.POST.get('phone')
+        
+    #     # product=Product.objects.filter(product_name='product_name')
+
+    #     # products=request.session.get('products')
+    #     uid=request.session.get('_auth_user_id')
+    #     username=User.objects.get(pk=uid)
+    #     product_name=Product.objects.get(product_name=product_name)
+    #     print(product_name,uid,username)
+
+    #     # products = Product.objects.filter(product_name=request.GET['product_name'])
+    #     # for i in products:
+    #         # a=(int(cart[i]['price']))
+    #         # b=cart[i]['quantity']
+    #         # total=a*b
+    #         # print(i)
+    #     Order=order(
+                
+    #             # username = username,
+    #             product_name=product_name,
+    #             # product_name=products[i]['name'],
+    #             # product_price=products[i]['price'],
+    #             # product_qty=products[i]['quantity'],
+    #             # product_image=products[i]['image'],
+    #             address=address,
+    #             pincode=pincode,
+    #             number=phone,
+    #             # total=total,
+    #             city=city,
+    #             state=state,
+    #         )
+
+    #     Order.save()
+
+
+            
+    #     messages.success(request, 'This is Checkout')
+
+
+
+    #     return redirect("index")
+            
+    return render(request,'cart.html')
+
+
+
+
 
 # Create your views here.
 def index(request):
@@ -71,6 +208,7 @@ def index(request):
     return render(request,'index.html',{'product':product})
     # return render(request,'index.html').order_by('-id')  product_des__icontains=q
 
+
 def search(request):
     q=request.GET['q']
     data=Product.objects.filter(Q(product_name__icontains=q) | Q(product_des__icontains=q))
@@ -78,46 +216,10 @@ def search(request):
     # print("======================")
     return render(request,'search.html',{'data':data})
 
-# def addtocart(request):
-    # if request.method == 'POST':
-        # if request.user.is_authenticated:
-            
-            # prod_id=int(request.POST.get('product_id'))
-            # product_check=Product.objects.get(id=prod_id)
-            # if(product_check):
-            #     if(Cart.objects.filter(user=request.user.id,product_id=prod_id)):
-            #         return JsonResponse({'status':"product already in cart"})
-            #     else:
-            #         prod_qty=int(request.POST.get('product_qty'))
-            #             # return JsonResponse({'status':"no"})
-
-            #         if product_check.quantity >= prod_qty:
-            #             Cart.objects.create(user=request.user,product_id=prod_id,product_qty=prod_qty)
-            #             return JsonResponse({'status':"add product"})
-            #         else:
-            #             return JsonResponse({'status':"only"})
-            # else:
-            #     return JsonResponse({'status':"no such product found"})
-
-        # else:
-        #      return JsonResponse({'status':"login must"})
-
-       
-
-    # return redirect('/')
-    
-# def cart(request):
-#     # cart = Cart.objects.filter(product_id=request.GET['product_id'])[0]
-#     cart=Cart.objects.filter(user=request.user)
-#     context={'cart':cart}
-#     return render(request,'cart.html',context)
 
 
 
 
-
-def order(request):
-   return render(request,'order.html')
 
 def about(request):
     return render(request,'about.html')
@@ -145,8 +247,6 @@ def orderproduct(request):
     # product_price = Product.objects.filter(product_price=request.GET['product_price'])[1]
    
     product = Product.objects.filter(product_name=request.GET['product_name'])[0]
-    # product = Product.objects.filter(product_category=request.GET['product_category'])[0]
-    # product = Product.objects.filter(product_name=request.GET['product_name'], product_category=request.GET['product_category'])[0]
     category = Product.objects.filter(product_category=request.GET['product_category'])
    
     # product1 = Product.objects.filter(product_category=request.GET['product_category'])[0]
@@ -157,6 +257,7 @@ def orderproduct(request):
 def pageView(request, isError=False):
     # Page View Counter
     pass 
+
 def loginuser(request):  
     if request.method == 'POST':
         pageView(request)
@@ -206,27 +307,27 @@ def signupuser(request):
         p=make_password(request.POST['pass1'])
         # p=request.POST['pass1']
       
-        form =signup()
-        # form=User()
-        form.first_name=f   
-        form.last_name=l
-        form.username=u
-        # form.gmail=g
-        # form.address=a
-        # form.city=c
-        form.password=p
+        # form =signup()
+        # form.first_name=f   
+        # form.last_name=l
+        # form.username=u
+        # form.password=p
         
-        form.save()
+        # form.save()
+        # messages.success(request, 'User Registration Successfully')
         form=User()
         form.first_name=f   
         form.last_name=l
         form.username=u
         form.password=p
         form.save()
+        # messages.success(request, 'User Registration Successfully')
         
       
         return redirect('/')
         # return render(request, "index.html")
+    # else:
+    #     messages.success(request, 'User Registration not')
 
    
 
@@ -251,48 +352,14 @@ def ResetPassword(request):
 
 
 
-
-
-            
-#             try:
-#                 return redirect(request.GET.get('return'))
-#             except:
-#                 return redirect('/')
-#         else:
-#             messages.error(request, 'Invalid Credentials, Please try again')
-#             try:
-#                 return redirect(request.GET.get('return'))
-#             except:
-#                 return redirect('/')
-#     else:
-#         pageView(request, True)
-#         return render(request, '404.html')
-
-
-
-# def loginuser(request):  
-#     if request.method=="POST":
-#         x= request.POST.get('username') 
-#         y= request.POST.get('password')
-
-#         member=signup.objects.filter(user_name=x,password=y).values()
-#         Context={"myval":member}
-#         for i in member:
-#             if("username" in i):
-#                 template=loader.get_template('index.html')
-#                 return HttpResponse(template.request(Context,request))
-#         return HttpResponse('no')
-
-  
-#    def password_confirm_view(request, uidb64, token):
-# context = {}
-# if request.method == 'POST':
-#     form = SetPasswordForm(data=request.POST, user=request.user)
-#     if form.is_valid():
-#         form.save() #I have error
-#         update_session_auth_hash(request, form.user)
-#         return redirect('password_reset_done')
-# else:
-#     form = SetPasswordForm(user=request.user)
-# context['form'] = form
-# return render(request, 'mdm/registration/password_confirm.html', context)
+# @api_view(['GET'])
+# def view_items(request):
+#     if request.method == 'GET':
+#         tutorials = User.objects.all()
+        
+#         title = request.query_params.get('title', None)
+#         if title is not None:
+#             tutorials = tutorials.filter(title__icontains=title)
+        
+#         tutorials_serializer = UserSerializer(tutorials, many=True)
+#         return Response(tutorials_serializer.data)

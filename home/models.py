@@ -1,4 +1,6 @@
+from datetime import datetime
 from distutils.command.upload import upload
+from email.mime import image
 from email.policy import default
 from itertools import product
 from django.db import models    
@@ -43,12 +45,12 @@ class Product(models.Model):
     product_name = models.CharField(max_length=50, default="")
     product_category = models.CharField(max_length=30, default="")
     product_image =models.ImageField(upload_to="home/img", default="")
-    product_price = models.CharField(max_length=30, default="")
+    product_price = models.IntegerField( default="")
     product_color1 = models.CharField(max_length=30, default="")
     product_color2 = models.CharField(max_length=30, default="")
     product_color3 = models.CharField(max_length=30, default="")
     product_des = models.CharField(max_length=200, default="")
-    product_qty = models.CharField(max_length=200, default="")
+    product_qty = models.IntegerField( default="")
 
 
 
@@ -62,17 +64,24 @@ class Product(models.Model):
 
 
 class order(models.Model):
-    first_name = models.CharField(max_length=30)
-    gmail= models.CharField(max_length=30)
+    username = models.ForeignKey(User,on_delete=models.CASCADE)
+    date= models.DateField(default=datetime.today)
     address= models.CharField(max_length=30)
     city= models.CharField(max_length=30)
-    pincode = models.CharField(max_length=30)
-    number= models.CharField(max_length=30)
+    pincode = models.IntegerField()
+    number= models.IntegerField()
     state = models.CharField(max_length=30)
-    
+    total=models.IntegerField( default=0)
+
+    product_image =models.ImageField(upload_to="home/img", default="")
+    product_qty = models.IntegerField( default="")
+    product_price = models.IntegerField( default="")
+    product_name = models.CharField(max_length=50, default="")
 
     def __str__(self):
-        return f"{self.first_name}"
+        return f"{self.username}"
+
+
    
     
 # class Cart(models.Model):
